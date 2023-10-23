@@ -30,6 +30,69 @@
 
     <!-- Theme Custom CSS -->
     <link rel="stylesheet" href="/static/stylesheets/theme-custom.css">
+
+    <!-- Scripts -->
+    <script src="/static/vendor/modernizr/modernizr.js"></script>
+    <script type="text/javascript" src="/static/javascripts/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script type="text/javascript" src="/static/javascripts/index.js"></script>
+    <script type="text/javascript" src="/static/javascripts/Viva.js"></script>
+    <script type="text/javascript" src="/static/javascripts/Viva-min.js"></script>
+    <script src="{% static 'javascripts/echarts.min.js' %}"></script>
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full"></script>
+
+    <script type="text/javascript">
+        {# Load MTS dataset #}
+
+        function mtsChart() {
+            const mtsCharts = echarts.init(document.getElementById('mtsdata'));
+
+            var option = {
+                title: {
+                    text: 'IDF Dataset'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['U3_HNC10CT111', 'U3_HNC10CT121', 'U3_HNC10CT131']
+                },
+                xAxis: {
+                    data:{{ xaxis }}
+                },
+                yAxis: {
+                    min: 43,
+                    max: 52,
+                },
+                series: [
+                    {
+                        name: 'U3_HNC10CT111',
+                        type: 'line',
+                        data: {{ U3_HNC10CT111 }}
+                    },
+                    {
+                        name: 'U3_HNC10CT121',
+                        type: 'line',
+                        data: {{ U3_HNC10CT121 }}
+                    },
+                    {
+                        name: 'U3_HNC10CT131',
+                        type: 'line',
+                        data: {{ U3_HNC10CT131 }}
+                    },
+                ]
+            };
+
+            option && mtsCharts.setOption(option);
+        }
+
+        {# Mine Constraints #}
+
+        function mineConstraints() {
+            document.getElementById("constraints").style.visibility = "visible";
+        }
+    </script>
 </head>
 
 <body>
@@ -62,15 +125,16 @@
 
             <div class="form-group  center">
                 <div class="center">
-                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="load-mts">Load MTS Dataset
+                    <button class="mb-xs mt-xs mr-xs btn btn-default" onclick="mtsChart()">
+                        Load MTS Dataset
                     </button>
                 </div>
             </div>
 
             <div class="form-group  center">
                 <div class="center">
-                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="mine-constraints">Mine
-                        Constraints
+                    <button class="mb-xs mt-xs mr-xs btn btn-default" onclick="mineConstraints()">
+                        Mine Constraints
                     </button>
                 </div>
             </div>
@@ -93,18 +157,106 @@
                 {# TODO #}
             </div>
 
+            <div class="form-group  center">
+                <div class="center">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="detect">
+                        Violation Detect
+                    </button>
+                </div>
+            </div>
 
+            <div class="form-group  center">
+                <div class="center">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="analysis">
+                        Violation Analysis
+                    </button>
+                </div>
+            </div>
+
+            <!-- Repair Phase -->
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <h4 class="sidebar-name center">Violation Repair</h4>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-group  center">
+                <div class="center">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="repair">
+                        Violation Repair
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group  center">
+                <div class="center">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="performance">
+                        Performance Analysis
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group  center">
+                <div class="center">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="update">
+                        Update
+                    </button>
+                </div>
+            </div>
         </aside>
+
+        <!-- Main Body -->
+        <section role="main" class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <div class="panel-actions">
+                                <a href="#" class="fa fa-caret-down"></a>
+                                <a href="#" class="fa fa-times"></a>
+                            </div>
+
+                            <h2 class="panel-title">MTS Exploration</h2>
+                            <p class="panel-subtitle"></p>
+                        </header>
+
+                        <div class="panel-body">
+                            <div id="mtsdata" style="width:100%;height:300px;"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <div class="panel-actions">
+                                <a href="#" class="fa fa-caret-down"></a>
+                                <a href="#" class="fa fa-times"></a>
+                            </div>
+
+                            <h2 class="panel-title">Mining Result</h2>
+                            <p class="panel-subtitle"></p>
+                        </header>
+
+                        <div class="panel-body">
+                            <div id="constraints" style="width:100%;height:300px;visibility:hidden;">
+                                `1. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `2. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `3. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `4. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `5. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `6. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `7. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                                `8. 7 \leq U3\_HNC10CT111 - U3\_HNC10CT121 \leq 8`<br/>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
     </div>
 </section>
 </body>
-
-<!-- Scripts -->
-<script src="/static/vendor/modernizr/modernizr.js"></script>
-<script type="text/javascript" src="/static/javascripts/jquery-3.5.1.min.js"></script>
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script type="text/javascript" src="/static/javascripts/index.js"></script>
-<script type="text/javascript" src="/static/javascripts/Viva.js"></script>
-<script type="text/javascript" src="/static/javascripts/Viva-min.js"></script>
-
 </html>

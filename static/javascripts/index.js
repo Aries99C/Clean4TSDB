@@ -409,7 +409,6 @@ $(document).ready(function(){
     });
 });
 
-
 $(document).ready(function(){
     $('#ac').change(function() {
         // this will contain a reference to the checkbox
@@ -417,7 +416,6 @@ $(document).ready(function(){
     });
 
 });
-
 
 // Model Configuration Button
 // TODO
