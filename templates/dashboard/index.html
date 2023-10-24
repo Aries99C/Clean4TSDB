@@ -560,6 +560,10 @@
 
             option && mtsCharts.setOption(option);
         }
+
+        function update() {
+            alert('Done Update Repaired MTS to TSDB.')
+        }
     </script>
 </head>
 
@@ -659,7 +663,7 @@
 
             <div class="form-group  center">
                 <div class="center">
-                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" id="update">
+                    <button type="button" class="mb-xs mt-xs mr-xs btn btn-default" onclick="update()">
                         Update
                     </button>
                 </div>
